@@ -22,6 +22,7 @@ export default function CompleteRegistrationPage({
   const router = useRouter();
   const [tokenStatus, setTokenStatus] = useState<'validating' | 'valid' | 'invalid' | 'expired'>('validating');
   const [errorMessage, setErrorMessage] = useState('');
+  const token = params.token;
   
   const {
     register,
@@ -31,7 +32,7 @@ export default function CompleteRegistrationPage({
   } = useForm<TokenFormData>({
     resolver: zodResolver(tokenSchema),
     defaultValues: {
-      token: params.token || '',
+      token: token || '',
     }
   });
 
@@ -40,12 +41,12 @@ export default function CompleteRegistrationPage({
     const validateToken = async () => {
       try {
         // This would be replaced with an actual API call to your account service
-        const result = await mockValidateTokenApi(params.token);
+        const result = await mockValidateTokenApi(token);
         
         if (result.valid) {
           setTokenStatus('valid');
           // Auto-populate the token field
-          setValue('token', params.token);
+          setValue('token', token);
         } else if (result.expired) {
           setTokenStatus('expired');
         } else {
@@ -58,7 +59,7 @@ export default function CompleteRegistrationPage({
     };
 
     validateToken();
-  }, [params.token, setValue]);
+  }, [token, setValue]);
 
   const onSubmit = async (data: TokenFormData) => {
     try {
@@ -85,12 +86,12 @@ export default function CompleteRegistrationPage({
     await new Promise(resolve => setTimeout(resolve, 500));
     
     // For demo purposes, consider any token starting with "expired" as expired
-    if (token.startsWith('expired')) {
+    if (token?.startsWith('expired')) {
       return { valid: false, expired: true };
     }
     
     // For demo purposes, consider any token starting with "valid" as valid
-    if (token.startsWith('valid')) {
+    if (token?.startsWith('valid')) {
       return { valid: true, expired: false };
     }
     
