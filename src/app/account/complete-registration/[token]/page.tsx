@@ -1,10 +1,3 @@
-
-// Create a page.tsx file
-export default function Page() {
-  return null;
-}
-
-// Create a layout.tsx file in the same folder
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -21,11 +14,7 @@ const tokenSchema = z.object({
 
 type TokenFormData = z.infer<typeof tokenSchema>;
 
-export default function CompleteRegistrationLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function CompleteRegistrationPage() {
   const router = useRouter();
   const params = useParams();
   const [tokenStatus, setTokenStatus] = useState<'validating' | 'valid' | 'invalid' | 'expired'>('validating');
@@ -198,7 +187,6 @@ export default function CompleteRegistrationLayout({
             </button>
           </form>
         )}
-        {children}
       </div>
     </div>
   );
