@@ -1,7 +1,14 @@
+
+// Create a page.tsx file
+export default function Page() {
+  return null;
+}
+
+// Create a layout.tsx file in the same folder
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -14,17 +21,16 @@ const tokenSchema = z.object({
 
 type TokenFormData = z.infer<typeof tokenSchema>;
 
-type PageProps = {
-  params: {
-    token: string;
-  };
-};
-
-export default function CompleteRegistrationPage({ params }: PageProps) {
+export default function CompleteRegistrationLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
+  const params = useParams();
   const [tokenStatus, setTokenStatus] = useState<'validating' | 'valid' | 'invalid' | 'expired'>('validating');
   const [errorMessage, setErrorMessage] = useState('');
-  const token = params.token;
+  const token = params.token as string;
   
   const {
     register,
@@ -192,6 +198,7 @@ export default function CompleteRegistrationPage({ params }: PageProps) {
             </button>
           </form>
         )}
+        {children}
       </div>
     </div>
   );
