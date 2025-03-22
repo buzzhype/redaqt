@@ -14,11 +14,13 @@ const tokenSchema = z.object({
 
 type TokenFormData = z.infer<typeof tokenSchema>;
 
-export default function CompleteRegistrationPage({ 
-  params 
-}: { 
-  params: { token: string } 
-}) {
+type PageProps = {
+  params: {
+    token: string;
+  };
+};
+
+export default function CompleteRegistrationPage({ params }: PageProps) {
   const router = useRouter();
   const [tokenStatus, setTokenStatus] = useState<'validating' | 'valid' | 'invalid' | 'expired'>('validating');
   const [errorMessage, setErrorMessage] = useState('');
