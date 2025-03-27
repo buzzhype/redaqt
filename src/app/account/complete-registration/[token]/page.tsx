@@ -1,11 +1,3 @@
-// This is a Server Component that receives the params
-export default function CompleteRegistrationPage({ params }: { params: { token: string } }) {
-  return (
-    <CompleteRegistrationClient token={params.token} />
-  );
-}
-
-// This is the Client Component that handles the form and UI
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -23,7 +15,7 @@ const tokenSchema = z.object({
 
 type TokenFormData = z.infer<typeof tokenSchema>;
 
-function CompleteRegistrationClient({ token }: { token: string }) {
+export default function CompleteRegistrationClient({ token }: { token: string }) {
   const router = useRouter();
   const [tokenStatus, setTokenStatus] = useState<'validating' | 'valid' | 'invalid' | 'expired'>('validating');
   const [errorMessage, setErrorMessage] = useState('');
