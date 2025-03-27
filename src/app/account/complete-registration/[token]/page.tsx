@@ -19,6 +19,8 @@ export default function CompleteRegistrationPage() {
   const params = useParams();
   const [tokenStatus, setTokenStatus] = useState<'validating' | 'valid' | 'invalid' | 'expired'>('validating');
   const [errorMessage, setErrorMessage] = useState('');
+  
+  // Get token from URL path parameter
   const token = params.token as string;
   
   const {
