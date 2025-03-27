@@ -1,11 +1,9 @@
 import CompleteRegistrationClient from './client';
 
-interface CompleteRegistrationPageProps {
-  params: {
-    token: string;
-  };
-}
-
-export default function CompleteRegistrationPage({ params }: CompleteRegistrationPageProps) {
+export default function CompleteRegistrationPage({
+  params,
+}: {
+  params: { token: string };
+}) {
   return <CompleteRegistrationClient token={params.token} />;
 }
