@@ -1,3 +1,4 @@
+// This is the Client Component that handles the form and UI
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -15,11 +16,11 @@ const tokenSchema = z.object({
 
 type TokenFormData = z.infer<typeof tokenSchema>;
 
-export default function CompleteRegistrationClient({ token }: { token: string }) {
+function CompleteRegistrationClient({ token }: { token: string }) {
   const router = useRouter();
   const [tokenStatus, setTokenStatus] = useState<'validating' | 'valid' | 'invalid' | 'expired'>('validating');
   const [errorMessage, setErrorMessage] = useState('');
-
+  
   const {
     register,
     handleSubmit,
@@ -32,13 +33,16 @@ export default function CompleteRegistrationClient({ token }: { token: string })
     }
   });
 
+  // When the component mounts, validate the token from the URL
   useEffect(() => {
     const validateToken = async () => {
       try {
+        // This would be replaced with an actual API call to your account service
         const result = await mockValidateTokenApi(token);
-
+        
         if (result.valid) {
           setTokenStatus('valid');
+          // Auto-populate the token field
           setValue('token', token);
         } else if (result.expired) {
           setTokenStatus('expired');
@@ -56,9 +60,11 @@ export default function CompleteRegistrationClient({ token }: { token: string })
 
   const onSubmit = async (data: TokenFormData) => {
     try {
+      // This would be replaced with an actual API call to your account service
       const result = await mockCompleteRegistrationApi(data.token);
-
+      
       if (result.success) {
+        // Redirect to login or dashboard
         router.push('/login?activated=true');
       } else if (result.expired) {
         setTokenStatus('expired');
@@ -71,35 +77,42 @@ export default function CompleteRegistrationClient({ token }: { token: string })
     }
   };
 
-  // Mock APIs
+  // Mock APIs for demonstration
   const mockValidateTokenApi = async (token: string) => {
+    // Simulate network request
     await new Promise(resolve => setTimeout(resolve, 500));
-
+    
+    // For demo purposes, consider any token starting with "expired" as expired
     if (token?.startsWith('expired')) {
       return { valid: false, expired: true };
     }
-
+    
+    // For demo purposes, consider any token starting with "valid" as valid
     if (token?.startsWith('valid')) {
       return { valid: true, expired: false };
     }
-
+    
     return { valid: false, expired: false };
   };
 
   const mockCompleteRegistrationApi = async (token: string) => {
+    // Simulate network request
     await new Promise(resolve => setTimeout(resolve, 500));
-
+    
+    // For demo purposes, simulate success for "valid" tokens
     if (token.startsWith('valid')) {
       return { success: true };
     }
-
+    
+    // For demo purposes, simulate expired for "expired" tokens
     if (token.startsWith('expired')) {
       return { success: false, expired: true };
     }
-
+    
     return { success: false };
   };
 
+  // If token is validating, show loading state
   if (tokenStatus === 'validating') {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -111,6 +124,7 @@ export default function CompleteRegistrationClient({ token }: { token: string })
     );
   }
 
+  // If token has expired, show session expired page
   if (tokenStatus === 'expired') {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -118,10 +132,12 @@ export default function CompleteRegistrationClient({ token }: { token: string })
           <div className="flex justify-center mb-8">
             <div className="w-16 h-16 bg-gray-400 rounded-full"></div>
           </div>
+          
           <h2 className="text-2xl font-bold text-center mb-4">Account Activation Session Expired</h2>
           <p className="text-center text-red-600 mb-6">
             The account setup was not completed in time and the session has expired. You must create account.
           </p>
+          
           <Link 
             href="/account/create-account"
             className="block w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-center font-medium rounded-md"
@@ -133,6 +149,7 @@ export default function CompleteRegistrationClient({ token }: { token: string })
     );
   }
 
+  // If token is invalid, show invalid token page
   if (tokenStatus === 'invalid') {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -142,10 +159,12 @@ export default function CompleteRegistrationClient({ token }: { token: string })
               <AlertTriangle size={40} className="text-red-600" />
             </div>
           </div>
+          
           <h2 className="text-2xl font-bold text-center mb-4">Invalid Registration Token</h2>
           <p className="text-center text-red-600 mb-6">
             The registration token is invalid or has been already used. Please check the link in your email or start over.
           </p>
+          
           <Link 
             href="/account/create-account"
             className="block w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-center font-medium rounded-md"
@@ -165,7 +184,9 @@ export default function CompleteRegistrationClient({ token }: { token: string })
             <CheckCircle2 size={40} className="text-blue-600" />
           </div>
         </div>
+        
         <h2 className="text-2xl font-bold text-center mb-6">Complete Registration</h2>
+        
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <input
@@ -178,9 +199,11 @@ export default function CompleteRegistrationClient({ token }: { token: string })
               <p className="mt-1 text-sm text-red-600">{errors.token.message}</p>
             )}
           </div>
+          
           {errorMessage && (
             <p className="text-sm text-red-600">{errorMessage}</p>
           )}
+          
           <button
             type="submit"
             disabled={isSubmitting}
