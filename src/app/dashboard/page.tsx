@@ -38,6 +38,18 @@ import {
   Upload
 } from 'lucide-react';
 
+// Define the document type interface
+interface Document {
+  id: number;
+  name: string;
+  encrypted: boolean;
+  lastModified: string;
+  size: string;
+  type: string;
+  sharedWith: string[];
+  classification: string;
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -49,13 +61,13 @@ export default function DashboardPage() {
   const [encryptionProgress, setEncryptionProgress] = useState(0);
   const [decryptionProgress, setDecryptionProgress] = useState(0);
   const [showEncryptionHelp, setShowEncryptionHelp] = useState(false);
-  const [processingDocument, setProcessingDocument] = useState(null);
-  const [documentActionMenuId, setDocumentActionMenuId] = useState(null);
+  const [processingDocument, setProcessingDocument] = useState<Document | null>(null);
+  const [documentActionMenuId, setDocumentActionMenuId] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState('name');
   const [filterStatus, setFilterStatus] = useState('all');
   
   // Sample document data
-  const [documents, setDocuments] = useState([
+  const [documents, setDocuments] = useState<Document[]>([
     { 
       id: 1, 
       name: 'Q1 Marketing Strategy.docx', 
@@ -187,19 +199,19 @@ export default function DashboardPage() {
     router.push('/login');
   };
   
-  const simulateEncryption = (document) => {
+  const simulateEncryption = (document: Document) => {
     setProcessingDocument(document);
     setShowEncryptionModal(true);
     setEncryptionProgress(0);
   };
   
-  const simulateDecryption = (document) => {
+  const simulateDecryption = (document: Document) => {
     setProcessingDocument(document);
     setShowDecryptionModal(true);
     setDecryptionProgress(0);
   };
   
-  const toggleDocumentActionMenu = (e, documentId) => {
+  const toggleDocumentActionMenu = (e: React.MouseEvent, documentId: number) => {
     e.stopPropagation();
     if (documentActionMenuId === documentId) {
       setDocumentActionMenuId(null);
@@ -208,7 +220,7 @@ export default function DashboardPage() {
     }
   };
   
-  const getClassificationBadgeColor = (classification) => {
+  const getClassificationBadgeColor = (classification: string) => {
     switch (classification.toLowerCase()) {
       case 'restricted':
         return 'bg-red-100 text-red-800 border-red-200';
