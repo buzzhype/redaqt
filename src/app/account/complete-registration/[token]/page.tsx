@@ -15,7 +15,8 @@ const tokenSchema = z.object({
 
 type TokenFormData = z.infer<typeof tokenSchema>;
 
-export default function CompleteRegistrationTokenPage({ params }: { params: { token: string } }) {
+// Correct type definition for App Router page component with dynamic params
+export default function CompleteRegistrationPage({ params }: { params: { token: string } }) {
   const router = useRouter();
   const [tokenStatus, setTokenStatus] = useState<'validating' | 'valid' | 'invalid' | 'expired'>('validating');
   const [errorMessage, setErrorMessage] = useState('');
