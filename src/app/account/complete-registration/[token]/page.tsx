@@ -1,10 +1,11 @@
-import CompleteRegistrationClient from './client'; // ✅ Import the client component
+import CompleteRegistrationClient from './client';
 
-// This is a Server Component that receives the params
-export default function CompleteRegistrationPage({
-  params,
-}: {
-  params: { token: string };
-}) {
+interface CompleteRegistrationPageProps {
+  params: {
+    token: string;
+  };
+}
+
+export default function CompleteRegistrationPage({ params }: CompleteRegistrationPageProps) {
   return <CompleteRegistrationClient token={params.token} />;
 }
