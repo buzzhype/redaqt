@@ -27,11 +27,11 @@ export default function SecuritySettingsPage() {
   const [sessionTimeout, setSessionTimeout] = useState('30');
   const [defaultClassification, setDefaultClassification] = useState('Internal');
   
-  const handleSessionTimeoutChange = (e) => {
+  const handleSessionTimeoutChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSessionTimeout(e.target.value);
   };
   
-  const handleDefaultClassificationChange = (e) => {
+  const handleDefaultClassificationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setDefaultClassification(e.target.value);
   };
 
