@@ -131,11 +131,11 @@ export default function DocumentList({
     } else if (document.type.includes('Excel') || document.type.includes('Spreadsheet')) {
       return <FileSpreadsheet size={20} className="text-green-500" />;
     } else if (document.type.includes('PDF')) {
-      return <FileImage size={20} className="text-red-500" />;
+      return <FileText size={20} className="text-red-500" />; // Using FileText for PDF as well
     } else if (document.type.includes('Image')) {
       return <FileImage size={20} className="text-purple-500" />;
     }
-    return <FileIcon size={20} className="text-gray-500" />;
+    return <FileText size={20} className="text-gray-500" />; // Using FileText as default
   };
 
   const filteredDocuments = getFilteredDocuments();
