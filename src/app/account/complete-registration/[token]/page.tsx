@@ -1,13 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 
 export default function CompleteRegistrationPage() {
+  const params = useParams();
+  const router = useRouter();
   const [token, setToken] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // For static demo purposes - would handle token verification in a real app
     if (!token.trim()) {
@@ -17,8 +20,12 @@ export default function CompleteRegistrationPage() {
       setErrorMessage('Incorrect token, please retry');
     } else {
       // Would redirect to dashboard or confirmation page in a real app
-      window.location.href = '/dashboard';
+      router.push('/dashboard');
     }
+  };
+
+  const handleTokenChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setToken(e.target.value);
   };
 
   return (
@@ -37,7 +44,7 @@ export default function CompleteRegistrationPage() {
             <input
               type="text"
               value={token}
-              onChange={(e) => setToken(e.target.value)}
+              onChange={handleTokenChange}
               placeholder="Token"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

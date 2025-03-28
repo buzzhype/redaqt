@@ -1,18 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import Link from 'next/link';
 import { Mail } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function ForgotPasswordPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // This would typically call an API to send a password reset email
     // For this static demo, we'll just simulate the success state
     setSubmitted(true);
+  };
+
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handleBackToLogin = () => {
+    router.push('/login');
   };
 
   return (
@@ -36,12 +46,12 @@ export default function ForgotPasswordPage() {
             <p className="text-gray-600">
               A recovery link will be sent to the email address on file, if it exists.
             </p>
-            <Link 
-              href="/login"
-              className="block w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-center font-medium rounded-md"
+            <button 
+              onClick={handleBackToLogin}
+              className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-center font-medium rounded-md"
             >
               Back to Login
-            </Link>
+            </button>
           </div>
         ) : (
           <>
@@ -54,7 +64,7 @@ export default function ForgotPasswordPage() {
                   <input
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={handleEmailChange}
                     placeholder="Email"
                     className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
