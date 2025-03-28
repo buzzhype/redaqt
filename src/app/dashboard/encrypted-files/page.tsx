@@ -6,7 +6,6 @@ import DocumentList from '../components/DocumentList';
 import FileUploader from '../components/FileUploader';
 import { useDocuments, Document } from '../contexts/DocumentContext';
 
-
 export default function EncryptedFilesPage() {
   const { updateDocument, getEncryptedDocuments } = useDocuments();
   const [showUploadModal, setShowUploadModal] = useState(false);
