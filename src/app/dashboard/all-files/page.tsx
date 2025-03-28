@@ -1,97 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { FolderClosed, Upload, Download, FileIcon } from 'lucide-react';
+import { FolderClosed, Upload, Download, FileText } from 'lucide-react';
 import DocumentList from '../components/DocumentList';
 import FileUploader from '../components/FileUploader';
 import { useDocuments, Document } from '../contexts/DocumentContext';
 
-// Sample document data
-const initialDocuments = [
-  { 
-    id: 1, 
-    name: 'Q1 Marketing Strategy.docx', 
-    encrypted: true, 
-    lastModified: '2 hours ago',
-    size: '2.4 MB',
-    type: 'Word Document',
-    sharedWith: [],
-    classification: 'Confidential'
-  },
-  { 
-    id: 2, 
-    name: 'Annual Budget Overview.xlsx', 
-    encrypted: true, 
-    lastModified: 'Yesterday',
-    size: '1.8 MB',
-    type: 'Excel Spreadsheet',
-    sharedWith: ['Jane Smith', 'Mark Taylor'],
-    classification: 'Restricted'
-  },
-  { 
-    id: 3, 
-    name: 'Project Timeline.pdf', 
-    encrypted: false, 
-    lastModified: '3 days ago',
-    size: '5.2 MB',
-    type: 'PDF Document',
-    sharedWith: ['Jane Smith', 'Mark Taylor', 'Sarah Johnson', 'David Brown'],
-    classification: 'Confidential'
-  },
-  { 
-    id: 4, 
-    name: 'Client Meeting Notes.docx', 
-    encrypted: false, 
-    lastModified: '1 week ago',
-    size: '1.1 MB',
-    type: 'Word Document',
-    sharedWith: [],
-    classification: 'Internal'
-  },
-  { 
-    id: 5, 
-    name: 'Company Logo Design.png', 
-    encrypted: false, 
-    lastModified: '2 weeks ago',
-    size: '4.5 MB',
-    type: 'Image',
-    sharedWith: [],
-    classification: 'Public'
-  },
-  { 
-    id: 6, 
-    name: 'Office Inventory.xlsx', 
-    encrypted: false, 
-    lastModified: '3 weeks ago',
-    size: '1.3 MB',
-    type: 'Excel Spreadsheet',
-    sharedWith: ['Admin Team'],
-    classification: 'Internal'
-  },
-  { 
-    id: 7, 
-    name: 'Quarterly Report.pdf', 
-    encrypted: true, 
-    lastModified: '1 month ago',
-    size: '3.7 MB',
-    type: 'PDF Document',
-    sharedWith: ['Executive Team'],
-    classification: 'Confidential'
-  }
-];
-
 export default function AllFilesPage() {
-  const [documents, setDocuments] = useState(initialDocuments);
+  const { documents, updateDocument } = useDocuments();
   const [showUploadModal, setShowUploadModal] = useState(false);
   
   const handleDocumentUpdate = (updatedDocument: Document) => {
     updateDocument(updatedDocument);
   };
-  };
 
   // Count files by type
   const getFileTypeStats = () => {
-    const stats = {};
+    const stats: Record<string, number> = {};
     documents.forEach(doc => {
       const type = doc.type.includes('Word') ? 'Word' : 
                  doc.type.includes('Excel') ? 'Excel' : 
@@ -141,7 +66,7 @@ export default function AllFilesPage() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-4">
           {Object.entries(fileTypeStats).map(([type, count]) => (
             <div key={type} className="bg-gray-50 border border-gray-200 rounded-md p-3 flex items-center">
-              <FileIcon size={18} className="text-gray-500 mr-2" />
+              <FileText size={18} className="text-gray-500 mr-2" />
               <div>
                 <div className="text-xs text-gray-500">{type} Files</div>
                 <div className="text-sm font-medium">{count}</div>

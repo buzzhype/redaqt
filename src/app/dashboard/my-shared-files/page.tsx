@@ -8,18 +8,18 @@ import { useDocuments, Document } from '../contexts/DocumentContext';
 export default function MySharedFilesPage() {
   const { updateDocument, getSharedByMeDocuments } = useDocuments();
   const [showSharingModal, setShowSharingModal] = useState(false);
-  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   
   const handleDocumentUpdate = (updatedDocument: Document) => {
     updateDocument(updatedDocument);
   };
 
-  const openSharingSettings = (document) => {
+  const openSharingSettings = (document: Document) => {
     setSelectedDocument(document);
     setShowSharingModal(true);
   };
 
-  const getAccessLevelBadgeColor = (accessLevel) => {
+  const getAccessLevelBadgeColor = (accessLevel: string) => {
     switch (accessLevel) {
       case 'Full Access':
         return 'bg-green-100 text-green-800';
