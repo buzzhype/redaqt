@@ -561,7 +561,13 @@ export default function ProfilePage() {
 }
 
 // Import these functions from lucide-react if they don't exist
-const Calendar = (props) => {
+// Define proper types for SVG props
+interface SVGProps extends React.SVGProps<SVGSVGElement> {
+  size?: number | string;
+  color?: string;
+}
+
+const Calendar = (props: SVGProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -583,7 +589,7 @@ const Calendar = (props) => {
   );
 };
 
-const Activity = (props) => {
+const Activity = (props: SVGProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -602,7 +608,7 @@ const Activity = (props) => {
   );
 };
 
-const ChevronRight = (props) => {
+const ChevronRight = (props: SVGProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
