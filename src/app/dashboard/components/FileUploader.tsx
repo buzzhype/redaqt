@@ -22,8 +22,8 @@ interface FileWithPreview extends File {
   progress: number;
   error?: string;
   uploaded?: boolean;
-  classification?: string;
   encrypted?: boolean;
+  classification?: string;
 }
 
 interface FileUploaderProps {
@@ -33,6 +33,7 @@ interface FileUploaderProps {
   maxSize?: number; // in MB
   acceptedFileTypes?: string[];
   showModal?: boolean;
+  encryptAfterUpload?: boolean;
 }
 
 const DEFAULT_MAX_SIZE = 20; // 20MB
@@ -51,14 +52,15 @@ export default function FileUploader({
   maxFiles = 10,
   maxSize = DEFAULT_MAX_SIZE,
   acceptedFileTypes = DEFAULT_ACCEPTED_TYPES,
-  showModal = false
+  showModal = false,
+  encryptAfterUpload = false
 }: FileUploaderProps) {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadComplete, setUploadComplete] = useState(false);
   const [classification, setClassification] = useState('Internal');
-  const [encryptAfterUpload, setEncryptAfterUpload] = useState(false);
+  const [encryptFiles, setEncryptFiles] = useState(encryptAfterUpload);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);
 
@@ -94,7 +96,7 @@ export default function FileUploader({
           clearInterval(uploadInterval);
           setTimeout(() => {
             setFiles(files => 
-              files.map(file => ({ ...file, uploaded: true, encrypted: encryptAfterUpload }))
+              files.map(file => ({ ...file, uploaded: true, encrypted: encryptFiles }))
             );
             setIsUploading(false);
             setUploadComplete(true);
@@ -106,7 +108,7 @@ export default function FileUploader({
     }, 300);
 
     return () => clearInterval(uploadInterval);
-  }, [isUploading, files, encryptAfterUpload]);
+  }, [isUploading, files, encryptFiles]);
 
   const handleDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -235,11 +237,11 @@ export default function FileUploader({
     setFiles([]);
     setIsUploading(false);
     setUploadComplete(false);
-    setEncryptAfterUpload(false);
+    setEncryptFiles(encryptAfterUpload);
     setClassification('Internal');
   };
 
-  // If this is a modal version of the uploader
+  // If this is a non-modal version of the uploader
   if (!showModal) {
     return (
       <div 
@@ -426,8 +428,8 @@ export default function FileUploader({
                     <input
                       type="checkbox"
                       id="encrypt-checkbox"
-                      checked={encryptAfterUpload}
-                      onChange={(e) => setEncryptAfterUpload(e.target.checked)}
+                      checked={encryptFiles}
+                      onChange={(e) => setEncryptFiles(e.target.checked)}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                       disabled={isUploading}
                     />
@@ -437,7 +439,7 @@ export default function FileUploader({
                   </div>
                 </div>
 
-                {(classification === 'Confidential' || classification === 'Restricted') && !encryptAfterUpload && (
+                {(classification === 'Confidential' || classification === 'Restricted') && !encryptFiles && (
                   <div className="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4">
                     <div className="flex">
                       <div className="flex-shrink-0">
@@ -474,7 +476,7 @@ export default function FileUploader({
                     <h4 className="text-sm font-medium text-blue-800">Document Security</h4>
                     <p className="mt-1 text-xs text-blue-700">
                       Classification: <span className="font-medium">{classification}</span><br />
-                      {encryptAfterUpload 
+                      {encryptFiles 
                         ? "Files encrypted for additional security." 
                         : "Files uploaded with standard security measures."}
                     </p>
