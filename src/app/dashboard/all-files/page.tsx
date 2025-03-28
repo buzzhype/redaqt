@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { FolderClosed, Upload, Download, FileIcon } from 'lucide-react';
 import DocumentList from '../components/DocumentList';
 import FileUploader from '../components/FileUploader';
+import { useDocuments, Document } from '../contexts/DocumentContext';
 
 // Sample document data
 const initialDocuments = [
@@ -83,10 +84,9 @@ export default function AllFilesPage() {
   const [documents, setDocuments] = useState(initialDocuments);
   const [showUploadModal, setShowUploadModal] = useState(false);
   
-  const handleDocumentUpdate = (updatedDocument) => {
-    setDocuments(documents.map(doc => 
-      doc.id === updatedDocument.id ? updatedDocument : doc
-    ));
+  const handleDocumentUpdate = (updatedDocument: Document) => {
+    updateDocument(updatedDocument);
+  };
   };
 
   // Count files by type

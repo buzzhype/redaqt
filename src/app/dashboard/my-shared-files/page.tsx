@@ -3,14 +3,14 @@
 import { useState } from 'react';
 import { Share2, Users, UserPlus, Clock, Shield, FileText, UserX, Settings } from 'lucide-react';
 import DocumentList from '../components/DocumentList';
-import { useDocuments } from '../contexts/DocumentContext';
+import { useDocuments, Document } from '../contexts/DocumentContext';
 
 export default function MySharedFilesPage() {
   const { updateDocument, getSharedByMeDocuments } = useDocuments();
   const [showSharingModal, setShowSharingModal] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
   
-  const handleDocumentUpdate = (updatedDocument) => {
+  const handleDocumentUpdate = (updatedDocument: Document) => {
     updateDocument(updatedDocument);
   };
 

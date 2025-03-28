@@ -4,13 +4,14 @@ import { useState } from 'react';
 import { Lock, Shield, Upload } from 'lucide-react';
 import DocumentList from '../components/DocumentList';
 import FileUploader from '../components/FileUploader';
-import { useDocuments } from '../contexts/DocumentContext';
+import { useDocuments, Document } from '../contexts/DocumentContext';
+
 
 export default function EncryptedFilesPage() {
   const { updateDocument, getEncryptedDocuments } = useDocuments();
   const [showUploadModal, setShowUploadModal] = useState(false);
   
-  const handleDocumentUpdate = (updatedDocument) => {
+  const handleDocumentUpdate = (updatedDocument: Document) => {
     updateDocument(updatedDocument);
   };
 

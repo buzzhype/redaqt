@@ -3,57 +3,13 @@
 import { useState } from 'react';
 import { Users, User, Clock, Shield, FileText } from 'lucide-react';
 import DocumentList from '../components/DocumentList';
-
-// Sample documents shared with the current user
-const initialDocuments = [
-  { 
-    id: 101, 
-    name: 'Team Budget Proposal.xlsx', 
-    encrypted: true, 
-    lastModified: '1 day ago',
-    size: '2.1 MB',
-    type: 'Excel Spreadsheet',
-    sharedWith: ['You', 'Management Team'],
-    classification: 'Confidential',
-    sharedBy: 'Jane Smith',
-    sharedDate: '3 days ago',
-    accessLevel: 'View & Comment'
-  },
-  { 
-    id: 102, 
-    name: 'Project Requirements.docx', 
-    encrypted: true, 
-    lastModified: '2 days ago',
-    size: '1.5 MB',
-    type: 'Word Document',
-    sharedWith: ['You', 'Development Team'],
-    classification: 'Internal',
-    sharedBy: 'Mark Taylor',
-    sharedDate: '1 week ago',
-    accessLevel: 'View Only'
-  },
-  { 
-    id: 103, 
-    name: 'Marketing Campaign Assets.zip', 
-    encrypted: false, 
-    lastModified: '5 days ago',
-    size: '15.8 MB',
-    type: 'Archive',
-    sharedWith: ['Marketing Department'],
-    classification: 'Internal',
-    sharedBy: 'Sarah Johnson',
-    sharedDate: '2 weeks ago',
-    accessLevel: 'Full Access'
-  }
-];
+import { useDocuments, Document } from '../contexts/DocumentContext';
 
 export default function SharedWithMePage() {
-  const [documents, setDocuments] = useState(initialDocuments);
+  const { updateDocument, getSharedWithMeDocuments } = useDocuments();
   
-  const handleDocumentUpdate = (updatedDocument) => {
-    setDocuments(documents.map(doc => 
-      doc.id === updatedDocument.id ? updatedDocument : doc
-    ));
+  const handleDocumentUpdate = (updatedDocument: Document) => {
+    updateDocument(updatedDocument);
   };
 
   return (
@@ -131,7 +87,7 @@ export default function SharedWithMePage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {documents.map((document) => (
+              {getSharedWithMeDocuments().map((document) => (
                 <tr key={document.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -149,13 +105,13 @@ export default function SharedWithMePage() {
                       <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center mr-2">
                         <User size={16} className="text-indigo-600" />
                       </div>
-                      <span className="text-sm text-gray-900">{document.sharedBy}</span>
+                      <span className="text-sm text-gray-900">{document.sharedBy || 'Unknown'}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500 flex items-center">
                       <Clock size={14} className="mr-1 text-gray-400" />
-                      {document.sharedDate}
+                      {document.sharedDate || document.lastModified}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -166,7 +122,7 @@ export default function SharedWithMePage() {
                           ? 'bg-blue-100 text-blue-800'
                           : 'bg-gray-100 text-gray-800'
                     }`}>
-                      {document.accessLevel}
+                      {document.accessLevel || 'View Only'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -188,7 +144,7 @@ export default function SharedWithMePage() {
             </tbody>
           </table>
           
-          {documents.length === 0 && (
+          {getSharedWithMeDocuments().length === 0 && (
             <div className="px-6 py-10 text-center">
               <Users size={48} className="mx-auto text-gray-400" />
               <h3 className="mt-2 text-sm font-medium text-gray-900">No shared documents</h3>

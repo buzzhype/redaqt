@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import DocumentList from './components/DocumentList';
 import FileUploader from './components/FileUploader';
-import { useDocuments } from './contexts/DocumentContext';
+import { useDocuments, Document } from './contexts/DocumentContext';
 
 export default function DashboardPage() {
   const { 
@@ -27,9 +27,11 @@ export default function DashboardPage() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showEncryptionHelp, setShowEncryptionHelp] = useState(false);
   
-  const handleDocumentUpdate = (updatedDocument) => {
+
+  const handleDocumentUpdate = (updatedDocument: Document) => {
     updateDocument(updatedDocument);
   };
+
   
   const countEncryptedDocuments = () => {
     return getEncryptedDocuments().length;
