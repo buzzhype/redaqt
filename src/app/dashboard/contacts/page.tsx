@@ -172,7 +172,7 @@ const ContactsDashboard = () => {
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Account Type Selector (for demo) */}
       <div className="flex gap-2 p-4 border-b border-gray-700">
-        {['Pro', 'Trial', 'Basic'].map((type: AccountType) => (
+        {(['Pro', 'Trial', 'Basic'] as AccountType[]).map((type) => (
           <button
             key={type}
             onClick={() => setAccountType(type)}
