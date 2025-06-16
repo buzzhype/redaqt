@@ -2,15 +2,37 @@
 import React, { useState } from 'react';
 import { Search, Plus, Edit3, User } from 'lucide-react';
 
+interface Contact {
+  id: number;
+  firstName: string;
+  lastName: string;
+  company: string;
+  alias: string;
+  mobile: string;
+  email: string;
+  initials: string;
+}
+
+interface ContactFormData {
+  firstName: string;
+  lastName: string;
+  company: string;
+  alias: string;
+  mobile: string;
+  email: string;
+}
+
+type AccountType = 'Pro' | 'Trial' | 'Basic';
+
 const ContactsDashboard = () => {
-  const [accountType, setAccountType] = useState('Pro'); // Pro, Trial, Basic
-  const [selectedContact, setSelectedContact] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [accountType, setAccountType] = useState<AccountType>('Pro'); // Pro, Trial, Basic
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isAdding, setIsAdding] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>('');
   
   // Sample contacts data
-  const [contacts, setContacts] = useState([
+  const [contacts, setContacts] = useState<Contact[]>([
     {
       id: 1,
       firstName: 'John',
@@ -43,7 +65,7 @@ const ContactsDashboard = () => {
     }
   ]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ContactFormData>({
     firstName: '',
     lastName: '',
     company: '',
@@ -58,7 +80,7 @@ const ContactsDashboard = () => {
     contact.alias.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleContactSelect = (contact) => {
+  const handleContactSelect = (contact: Contact) => {
     setSelectedContact(contact);
     setFormData({
       firstName: contact.firstName,
@@ -94,16 +116,16 @@ const ContactsDashboard = () => {
   const handleAccept = () => {
     if (isAdding) {
       // Add new contact
-      const newContact = {
+      const newContact: Contact = {
         id: contacts.length + 1,
         ...formData,
         initials: formData.firstName.charAt(0) + formData.lastName.charAt(0)
       };
       setContacts([...contacts, newContact]);
       setSelectedContact(newContact);
-    } else if (isEditing) {
+    } else if (isEditing && selectedContact) {
       // Update existing contact
-      const updatedContacts = contacts.map(contact =>
+      const updatedContacts = contacts.map((contact: Contact) =>
         contact.id === selectedContact.id ? { ...contact, ...formData } : contact
       );
       setContacts(updatedContacts);
@@ -137,7 +159,7 @@ const ContactsDashboard = () => {
     }
   };
 
-  const getAccountTypeColor = (type) => {
+  const getAccountTypeColor = (type: AccountType) => {
     switch (type) {
       case 'Pro': return 'bg-green-600';
       case 'Trial': return 'bg-blue-500';
@@ -150,7 +172,7 @@ const ContactsDashboard = () => {
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Account Type Selector (for demo) */}
       <div className="flex gap-2 p-4 border-b border-gray-700">
-        {['Pro', 'Trial', 'Basic'].map(type => (
+        {['Pro', 'Trial', 'Basic'].map((type: AccountType) => (
           <button
             key={type}
             onClick={() => setAccountType(type)}
@@ -172,14 +194,14 @@ const ContactsDashboard = () => {
                 type="text"
                 placeholder="Search"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
               />
             </div>
 
             {/* Contact List */}
             <div className="space-y-2">
-              {filteredContacts.map(contact => (
+              {filteredContacts.map((contact: Contact) => (
                 <div
                   key={contact.id}
                   onClick={() => handleContactSelect(contact)}
@@ -248,7 +270,7 @@ const ContactsDashboard = () => {
                   <input
                     type="text"
                     value={formData.firstName}
-                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, firstName: e.target.value})}
                     disabled={!isEditing && !isAdding}
                     className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white disabled:bg-gray-700 disabled:text-gray-300 focus:outline-none focus:border-blue-500"
                   />
@@ -259,7 +281,7 @@ const ContactsDashboard = () => {
                   <input
                     type="text"
                     value={formData.lastName}
-                    onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, lastName: e.target.value})}
                     disabled={!isEditing && !isAdding}
                     className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white disabled:bg-gray-700 disabled:text-gray-300 focus:outline-none focus:border-blue-500"
                   />
@@ -270,7 +292,7 @@ const ContactsDashboard = () => {
                   <input
                     type="text"
                     value={formData.company}
-                    onChange={(e) => setFormData({...formData, company: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, company: e.target.value})}
                     disabled={!isEditing && !isAdding}
                     className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white disabled:bg-gray-700 disabled:text-gray-300 focus:outline-none focus:border-blue-500"
                   />
@@ -285,7 +307,7 @@ const ContactsDashboard = () => {
                   <input
                     type="text"
                     value={formData.alias}
-                    onChange={(e) => setFormData({...formData, alias: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, alias: e.target.value})}
                     disabled={!isEditing && !isAdding || accountType !== 'Pro'}
                     placeholder={accountType === 'Pro' ? '@alias' : '@FN-LN-4Digits'}
                     className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white disabled:bg-gray-700 disabled:text-gray-300 focus:outline-none focus:border-blue-500"
@@ -297,7 +319,7 @@ const ContactsDashboard = () => {
                   <input
                     type="text"
                     value={formData.mobile}
-                    onChange={(e) => setFormData({...formData, mobile: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, mobile: e.target.value})}
                     disabled={!isEditing && !isAdding}
                     className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white disabled:bg-gray-700 disabled:text-gray-300 focus:outline-none focus:border-blue-500"
                   />
@@ -308,7 +330,7 @@ const ContactsDashboard = () => {
                   <input
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})}
                     disabled={!isEditing && !isAdding}
                     className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white disabled:bg-gray-700 disabled:text-gray-300 focus:outline-none focus:border-blue-500"
                   />
