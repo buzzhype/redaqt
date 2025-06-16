@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import { Star, Award, X, Search, Plus } from 'lucide-react';
 
@@ -12,7 +13,7 @@ const CertificateDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddLogo, setShowAddLogo] = useState(false);
   const [newLogoName, setNewLogoName] = useState('');
-  const [draggedFile, setDraggedFile] = useState(null);
+  const [draggedFile, setDraggedFile] = useState<File | null>(null);
 
   // Simplified certificate data
   const certificateData = {
@@ -29,7 +30,7 @@ const CertificateDashboard = () => {
   );
 
   // Handle file drop
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
     const imageFile = files.find(file => 
@@ -43,7 +44,7 @@ const CertificateDashboard = () => {
     }
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
@@ -97,9 +98,9 @@ const CertificateDashboard = () => {
   );
 
   return (
-    <div className="flex h-screen bg-gray-900 text-white m-0">
+    <div className="flex h-screen bg-gray-900 text-white">
       {/* Left Sidebar - Logo List */}
-      <div className="w-80  p-6 border-r border-gray-700">
+      <div className="w-80 bg-black p-6 border-r border-gray-700">
         {/* Account Type */}
         <div className="mb-6">
           <div className="inline-block px-3 py-1 bg-green-600 text-white rounded text-sm font-medium">
@@ -117,7 +118,7 @@ const CertificateDashboard = () => {
           <input
             type="text"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
             placeholder="Search"
             className="w-full pl-10 pr-4 py-2 bg-gray-800 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-400"
           />
@@ -214,7 +215,7 @@ const CertificateDashboard = () => {
       </div>
 
       {/* Right Sidebar - Certificate Types */}
-      <div className="w-80 p-6 border-l border-gray-700">
+      <div className="w-80 bg-gray-800 p-6 border-l border-gray-700">
         <h3 className="text-white text-xl font-semibold mb-6">Certificate Types:</h3>
         
         <div className="space-y-6">
@@ -260,7 +261,7 @@ const CertificateDashboard = () => {
               <input
                 type="text"
                 value={newLogoName}
-                onChange={(e) => setNewLogoName(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLogoName(e.target.value)}
                 className="w-full px-4 py-3 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-400"
                 placeholder="RedaQt Logo"
               />
