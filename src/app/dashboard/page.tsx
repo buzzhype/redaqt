@@ -61,6 +61,15 @@ interface ProcessedFile {
   path: string;
 }
 
+interface RecentFile {
+  name: string;
+  originalName: string;
+  date: string;
+  id: number;
+  classification: string;
+  status: 'encrypted' | 'decrypted';
+}
+
 export default function EnhancedDashboardPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -83,9 +92,9 @@ export default function EnhancedDashboardPage() {
   const [smartPolicyError, setSmartPolicyError] = useState('');
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   
-  const [recentlyProtectedFiles, setRecentlyProtectedFiles] = useState([
-    { name: '2025 Financial Report.xlsx.efp', originalName: '2025 Financial Report.xlsx', date: '2025-04-10', id: 1, classification: 'Confidential', status: 'encrypted' as const },
-    { name: 'Wire Transfer Routing.docx.efp', originalName: 'Wire Transfer Routing.docx', date: '2025-04-09', id: 2, classification: 'Restricted', status: 'encrypted' as const }
+  const [recentlyProtectedFiles, setRecentlyProtectedFiles] = useState<RecentFile[]>([
+    { name: '2025 Financial Report.xlsx.efp', originalName: '2025 Financial Report.xlsx', date: '2025-04-10', id: 1, classification: 'Confidential', status: 'encrypted' },
+    { name: 'Wire Transfer Routing.docx.efp', originalName: 'Wire Transfer Routing.docx', date: '2025-04-09', id: 2, classification: 'Restricted', status: 'encrypted' }
   ]);
   
   // Smart Policy Settings for encryption
@@ -271,13 +280,13 @@ export default function EnhancedDashboardPage() {
       setProcessComplete(true);
       
       // Add to recently protected files
-      const newFile = {
+      const newFile: RecentFile = {
         name: encryptedFileMetadata.originalName,
         originalName: encryptedFileMetadata.originalName,
         date: new Date().toISOString().split('T')[0],
         id: Date.now(),
         classification: encryptedFileMetadata.classification,
-        status: 'decrypted' as const
+        status: 'decrypted'
       };
       setRecentlyProtectedFiles(prev => [newFile, ...prev.slice(0, 4)]);
     }
@@ -313,13 +322,13 @@ export default function EnhancedDashboardPage() {
       setProcessComplete(true);
       
       // Add to recently protected files
-      const newFile = {
+      const newFile: RecentFile = {
         name: encryptedFileMetadata.originalName,
         originalName: encryptedFileMetadata.originalName,
         date: new Date().toISOString().split('T')[0],
         id: Date.now(),
         classification: encryptedFileMetadata.classification,
-        status: 'decrypted' as const
+        status: 'decrypted'
       };
       setRecentlyProtectedFiles(prev => [newFile, ...prev.slice(0, 4)]);
     } else {
@@ -376,13 +385,13 @@ export default function EnhancedDashboardPage() {
     setProcessComplete(true);
     
     // Add to recently protected files
-    const newFile = {
+    const newFile: RecentFile = {
       name: encryptedFileName,
       originalName: currentFile.name,
       date: new Date().toISOString().split('T')[0],
       id: Date.now(),
       classification: 'Internal',
-      status: 'encrypted' as const
+      status: 'encrypted'
     };
     setRecentlyProtectedFiles(prev => [newFile, ...prev.slice(0, 4)]);
     
@@ -488,9 +497,6 @@ export default function EnhancedDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      {/* Header */}
-     
-
       <div className="flex-1 p-8">
         {/* Main Drop Zone */}
         <div
